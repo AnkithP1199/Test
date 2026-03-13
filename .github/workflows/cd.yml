@@ -3,9 +3,9 @@ cat > .github/workflows/cd.yml <<'EOF'
 name: iOS CD
 
 on:
-  push:
-    branches:
-      - main
+  push:[main]
+    branches:[main]
+    
 
 permissions:
   contents: read
