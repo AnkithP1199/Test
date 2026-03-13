@@ -1,6 +1,5 @@
 # CD workflow
-cat > .github/workflows/cd.yml <<'EOF'
-name: iOS CD
+cat > .github/workflows/cd.yml <<'EOF name: iOS CD
 
 on:
   push:[main]
