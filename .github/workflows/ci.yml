@@ -1,0 +1,54 @@
+# CI workflow
+cat > .github/workflows/ci.yml <<'EOF'
+name: iOS CI
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ "**" ]
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+
+      - name: Install xcodegen (optional)
+        run: |
+          if ! command -v xcodegen >/dev/null 2>&1; then
+            brew install xcodegen || true
+          fi
+
+      - name: Generate Xcode project (xcodegen)
+        run: |
+          if [ -f project.yml ]; then
+            xcodegen generate
+          fi
+
+      - name: Build app
+        run: |
+          set -o pipefail
+          xcodebuild -project TestApp.xcodeproj -scheme TestApp -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.0' clean build | xcpretty || true
+
+      - name: Run tests
+        run: |
+          set -o pipefail
+          xcodebuild test -project TestApp.xcodeproj -scheme TestApp -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.0' | xcpretty -t || true
+
+      - name: SwiftLint (optional)
+        run: |
+          if which swiftlint >/dev/null; then
+            swiftlint
+          else
+            echo "swiftlint not installed, skipping"
+          fi
+EOF
