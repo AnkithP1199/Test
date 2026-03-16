@@ -1,0 +1,20 @@
+## Description
+## Related Issue(s)
+Closes #
+
+## PR Type
+- [ ] Feature (Implementing a User Story)
+- [ ] Bug Fix (Resolving a Bug Report)
+- [ ] Refactoring / Chore / Other
+
+## CI/CD Pipeline Checks
+- [ ] GitHub Actions (CI) automated tests have passed on this branch.
+- [ ] This branch is ready to be merged into `main` and picked up by GitHub Actions (CD) for server deployment.
+
+## Developer Checklist
+- [ ] I have branched off correctly and my commits are clean.
+- [ ] I have performed a self-review of my code.
+- [ ] If this is a bug fix, I have verified the tester's reproduction steps no longer cause the issue.
+
+## Reviewer Instructions
+- [ ] PR has been reviewed and approved for merge.
