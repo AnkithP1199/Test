@@ -1,0 +1,30 @@
+name: iOS CD
+
+# This tells GitHub to ONLY run this when code is merged to main
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: macos-latest
+
+    steps:
+      # Step 1: Download your code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Ensure the correct Xcode version is selected
+      - name: Select Xcode
+        run: sudo xcode-select -switch /Applications/Xcode.app
+
+      # Step 3: Trigger Fastlane to build and upload to TestFlight
+      - name: Deploy to TestFlight via Fastlane
+        run: fastlane beta
+        # These are the secrets Fastlane needs to talk to Apple
+        env:
+          APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
+          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
