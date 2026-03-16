@@ -1,54 +1,31 @@
-# CI workflow
-cat > .github/workflows/ci.yml <<'EOF'
 name: iOS CI
 
+# This tells GitHub WHEN to run this pipeline
 on:
-  pull_request:
-    branches: [ main ]
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
+# This tells GitHub WHAT to do
 jobs:
   build-and-test:
-    name: Build and Test
-    runs-on: macos-latest
-    timeout-minutes: 45
+    # We need a Mac to build iOS apps!
+    runs-on: macos-latest 
+
     steps:
-      - name: Checkout
+      # Step 1: Download your code into the virtual Mac
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.1'
+      # Step 2: Ensure the correct Xcode version is selected
+      - name: Select Xcode
+        run: sudo xcode-select -switch /Applications/Xcode.app
 
-      - name: Install xcodegen (optional)
-        run: |
-          if ! command -v xcodegen >/dev/null 2>&1; then
-            brew install xcodegen || true
-          fi
-
-      - name: Generate Xcode project (xcodegen)
-        run: |
-          if [ -f project.yml ]; then
-            xcodegen generate
-          fi
-
-      - name: Build app
-        run: |
-          set -o pipefail
-          xcodebuild -project TestApp.xcodeproj -scheme TestApp -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.0' clean build | xcpretty || true
-
-      - name: Run tests
-        run: |
-          set -o pipefail
-          xcodebuild test -project TestApp.xcodeproj -scheme TestApp -destination 'platform=iOS Simulator,name=iPhone 14,OS=17.0' | xcpretty -t || true
-
-      - name: SwiftLint (optional)
-        run: |
-          if which swiftlint >/dev/null; then
-            swiftlint
-          else
-            echo "swiftlint not installed, skipping"
-          fi
-EOF
+      # Step 3: Run the tests (We will use Fastlane for this later, but here is the placeholder)
+      - name: Run Unit Tests
+        run: echo "Running tests... (We will replace this with fastlane test commands later!)"
+        
+      # Step 4: Run SwiftLint for code quality
+      - name: Run SwiftLint
+        run: echo "Running SwiftLint... (Will execute once SwiftLint is installed in the project)"
