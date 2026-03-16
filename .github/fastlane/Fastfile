@@ -1,1 +1,23 @@
+default_platform(:ios)
 
+platform :ios do
+  
+  desc "Runs all the iOS unit and UI tests"
+  lane :test do
+    # 'scan' is Fastlane's command for running Xcode tests
+    scan(
+      scheme: "Test", # We will update this to your actual Xcode scheme later
+      devices: ["iPhone 15 Pro"], # Tells GitHub which simulator to use
+      clean: true
+    )
+  end
+
+  desc "Builds the app and uploads to TestFlight"
+  lane :beta do
+    # We will uncomment and configure these later during the CD phase
+    # gym(scheme: "Test") # 'gym' builds the app
+    # pilot               # 'pilot' uploads to TestFlight
+    puts "Beta lane is ready to be configured!"
+  end
+
+end
