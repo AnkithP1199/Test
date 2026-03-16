@@ -1,0 +1,31 @@
+name: iOS CI
+
+# This tells GitHub WHEN to run this pipeline
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+# This tells GitHub WHAT to do
+jobs:
+  build-and-test:
+    # We need a Mac to build iOS apps!
+    runs-on: macos-latest 
+
+    steps:
+      # Step 1: Download your code into the virtual Mac
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Ensure the correct Xcode version is selected
+      - name: Select Xcode
+        run: sudo xcode-select -switch /Applications/Xcode.app
+
+      # Step 3: Run the tests (We will use Fastlane for this later, but here is the placeholder)
+      - name: Run Unit Tests via Fastlane
+        run: fastlane test
+        
+      # Step 4: Run SwiftLint for code quality
+      - name: Run SwiftLint
+        run: echo "Running SwiftLint... (Will execute once SwiftLint is installed in the project)"
